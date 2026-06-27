@@ -1,3 +1,5 @@
+from urllib.parse import urlparse  # <-- Certifique-se de que este import está aqui
+
 import os
 import xml.etree.ElementTree as ET
 import mysql.connector
@@ -9,14 +11,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def conectar_mysql():
-    """Configura e retorna a conexão usando variáveis de ambiente do .env."""
+    """Configura e retorna a conexão interpretando a Service URI do Aiven."""
     try:
-        conn = mysql.connector.connect(url=os.getenv("DATABASE_URL"))
+        # Pega a Service URI do arquivo .env
+        database_url = os.getenv("DATABASE_URL")
+        
+        if not database_url:
+            print("Erro: A variável DATABASE_URL não foi encontrada no arquivo .env.")
+            return None
+            
+        # Faz o parse da URL automaticamente
+        url = urlparse(database_url)
+        
+        # Limpa a barra inicial do path para obter o nome exato do banco
+        nome_banco = url.path.lstrip('/')
+        
+        # Conecta separando os argumentos extraídos da URI
+        conn = mysql.connector.connect(
+            host=url.hostname,
+            user=url.username,
+            password=url.password,
+            port=url.port or 3306,
+            database=nome_banco,
+            charset="utf8mb4",
+        )
         return conn
     except mysql.connector.Error as err:
-        print(f"Erro ao conectar ao MySQL: {err}")
+        print(f"Erro ao conectar ao MySQL no Aiven: {err}")
         return None
-
 # --- Funções de Tratamento e Regras de Negócio ---
 def tratar_texto(valor, padrao="Não informado"):
     return valor if valor and str(valor).strip() else padrao
