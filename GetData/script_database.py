@@ -11,14 +11,7 @@ load_dotenv()
 def conectar_mysql():
     """Configura e retorna a conexão usando variáveis de ambiente do .env."""
     try:
-        conn = mysql.connector.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME"),
-            port=int(os.getenv("DB_PORT", 3306)),
-            charset="utf8mb4",
-        )
+        conn = mysql.connector.connect(url=os.getenv("DATABASE_URL"))
         return conn
     except mysql.connector.Error as err:
         print(f"Erro ao conectar ao MySQL: {err}")
