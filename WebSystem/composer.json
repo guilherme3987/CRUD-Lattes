@@ -1,0 +1,13 @@
+{
+  "name": "crud-lattes/app",
+  "description": "CRUD Lattes - Scientia Discovery",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "App\\": ""
+    }
+  },
+  "require": {
+    "php": ">=8.1"
+  }
+}

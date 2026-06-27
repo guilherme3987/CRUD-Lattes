@@ -1,0 +1,29 @@
+# === Environment variables (credentials) ===
+.env
+
+# === Composer dependencies ===
+vendor/
+WebSystem/vendor/
+
+# === Python virtual environment ===
+.venv/
+GetData/.venv/
+
+# === Python cache ===
+__pycache__/
+*.pyc
+*.pyo
+
+# === IDE / editor ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === OS ===
+.DS_Store
+Thumbs.db
+*.log
