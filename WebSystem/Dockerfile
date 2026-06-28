@@ -16,12 +16,13 @@ WORKDIR /var/www/html
 # Copia o projeto
 COPY . /var/www/html/
 
-# FORÇA O LINUX A RENOMEAR TODAS AS PASTAS DO MVC (Mata os problemas de maiúsculas do Windows)
+# FORÇA O LINUX A RENOMEAR TODAS AS PASTAS DO MVC (Mata definitivamente os problemas do Windows)
 RUN mv /var/www/html/core /var/www/html/Core || true
 RUN mv /var/www/html/controllers /var/www/html/Controllers || true
 RUN mv /var/www/html/models /var/www/html/Models || true
 RUN mv /var/www/html/services /var/www/html/Services || true
 RUN mv /var/www/html/repositories /var/www/html/Repositories || true
+RUN mv /var/www/html/config /var/www/html/Config || true
 
 # Otimiza e reconstrói o mapa absoluto de classes do Composer
 RUN composer dump-autoload --optimize
