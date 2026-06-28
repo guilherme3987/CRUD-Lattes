@@ -25,3 +25,4 @@ Thumbs.db
 .DS_Store
 Thumbs.db
 *.log
+echo -e "\n# === Environment variables ===\n.env\nGetData/.env" >> .gitignore
