@@ -18,7 +18,6 @@ class Database {
                 die("Erro Crítico: A variável DATABASE_URL não foi detectada no ambiente do Render.");
             }
 
-            // O PHP analisa a URI e extrai os componentes automaticamente
             $dbparts = parse_url($url);
             $host = $dbparts['host'] ?? '';
             $port = $dbparts['port'] ?? '3306';
@@ -26,9 +25,19 @@ class Database {
             $pass = $dbparts['pass'] ?? '';
             $db   = isset($dbparts['path']) ? ltrim($dbparts['path'], '/') : '';
 
+            $opts = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            ];
+
+            if (isset($dbparts['query'])) {
+                parse_str($dbparts['query'], $queryParams);
+                if (($queryParams['ssl-mode'] ?? null) === 'REQUIRED') {
+                    $opts[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+                }
+            }
+
             try {
-                self::$conexao = new PDO("mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4", $user, $pass);
-                self::$conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                self::$conexao = new PDO("mysql:host=$host;dbname=$db;port=$port;charset=utf8mb4", $user, $pass, $opts);
             } catch (PDOException $e) {
                 die("Erro na conexão com o banco: " . $e->getMessage());
             }
