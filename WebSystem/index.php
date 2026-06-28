@@ -3,8 +3,6 @@
 session_start();
 
 require_once __DIR__ . '/vendor/autoload.php';
-// Força o carregamento da classe Database
-require_once __DIR__ . '/Config/Database.php';
 use App\Core\Router;
 use App\Controllers\PesquisadorController;
 

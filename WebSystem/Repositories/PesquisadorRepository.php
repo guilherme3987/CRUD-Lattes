@@ -2,19 +2,17 @@
 
 namespace App\Repositories;
 
-require_once __DIR__ . '/../Config/Database.php'; 
-
 use App\Config\Database;
 use PDO;
 class PesquisadorRepository {
     public function getAll(): array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->query("SELECT * FROM pesquisador ORDER BY nome_completo");
         return $stmt->fetchAll();
     }
 
     public function getById(string $idLattes): ?array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("SELECT * FROM pesquisador WHERE id_lattes = ?");
         $stmt->execute([$idLattes]);
         $result = $stmt->fetch();
@@ -22,7 +20,7 @@ class PesquisadorRepository {
     }
 
     public function create(array $data): void {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("
             INSERT INTO pesquisador (id_lattes, email, senha, nome_completo, pais_nascimento, cidade_nascimento, orcid_id, resumo_cv)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -40,7 +38,7 @@ class PesquisadorRepository {
     }
 
     public function update(string $idLattes, array $data): void {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("
             UPDATE pesquisador SET
                 nome_completo = ?, email = ?,
@@ -59,18 +57,18 @@ class PesquisadorRepository {
     }
 
     public function delete(string $idLattes): void {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("DELETE FROM pesquisador WHERE id_lattes = ?");
         $stmt->execute([$idLattes]);
     }
 
     public function getCount(): int {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         return (int) $conn->query("SELECT COUNT(*) FROM pesquisador")->fetchColumn();
     }
 
     public function findByEmail(string $email): ?array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("SELECT * FROM pesquisador WHERE email = ?");
         $stmt->execute([$email]);
         $result = $stmt->fetch();
@@ -78,21 +76,21 @@ class PesquisadorRepository {
     }
 
     public function searchByOrcid(string $q): array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("SELECT * FROM pesquisador WHERE orcid_id LIKE ? ORDER BY nome_completo");
         $stmt->execute(["%$q%"]);
         return $stmt->fetchAll();
     }
 
     public function searchById(string $q): array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("SELECT * FROM pesquisador WHERE id_lattes LIKE ? ORDER BY nome_completo");
         $stmt->execute(["%$q%"]);
         return $stmt->fetchAll();
     }
 
     public function searchByIdOrOrcid(string $q): array {
-        $conn = Database::getConnection();
+        $conn = Database::conectar();
         $stmt = $conn->prepare("SELECT * FROM pesquisador WHERE id_lattes LIKE ? OR orcid_id LIKE ? ORDER BY nome_completo");
         $like = "%$q%";
         $stmt->execute([$like, $like]);
