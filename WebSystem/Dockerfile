@@ -13,8 +13,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copia apenas o diretório WebSystem para a raiz do servidor
-COPY ./WebSystem /var/www/html/
+# Copia todo o conteúdo para a raiz do servidor
+COPY . /var/www/html/
 
 RUN composer dump-autoload --optimize
 
