@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Config\Database;
+require_once __DIR__ . '/../Config/Database.php'; 
 
+use App\Config\Database;
+use PDO;
 class PesquisadorRepository {
     public function getAll(): array {
         $conn = Database::getConnection();
