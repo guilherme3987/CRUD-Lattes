@@ -1,5 +1,5 @@
 # CRUD Lattes — Scientia Discovery
-
+URL: https://crud-lattes.onrender.com/
 Sistema web para consulta, cadastro e gerenciamento de currículos da plataforma Lattes (CNPq). O projeto importa dados reais de currículos em XML, extrai informações acadêmicas e profissionais, e disponibiliza uma interface para navegação pública e edição autenticada.
 
 A aplicação nasce da necessidade de centralizar a visualização de pesquisadores a partir dos dados abertos da plataforma Lattes. Em vez de depender da interface oficial, o sistema oferece busca por ORCID, perfis públicos, painel administrativo e suporte a temas claro/escuro — tudo em uma aplicação PHP sem frameworks, construída sobre arquitetura MVC.
