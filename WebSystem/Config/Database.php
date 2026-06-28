@@ -7,19 +7,19 @@ class Database {
 
     public static function conectar() {
         if (self::$conexao === null) {
-            $url = getenv('DATABASE_URL');
+            $url = getenv('DATABASE_URL') ?: ($_ENV['DATABASE_URL'] ?? ($_SERVER['DATABASE_URL'] ?? null));
 
-            if (!$url) {
+            if (!$url && file_exists(__DIR__ . '/../.env')) {
                 $env = parse_ini_file(__DIR__ . '/../.env');
-                $url = $env ? $env['DATABASE_URL'] : null;
+                $url = $env['DATABASE_URL'] ?? null;
             }
 
             if (!$url) {
-                die("DATABASE_URL não configurada. Defina a variável de ambiente DATABASE_URL.");
+                die("Erro Crítico: A variável DATABASE_URL não foi detectada no ambiente do Render.");
             }
 
+            // O PHP analisa a URI e extrai os componentes automaticamente
             $dbparts = parse_url($url);
-
             $host = $dbparts['host'] ?? '';
             $port = $dbparts['port'] ?? '3306';
             $user = $dbparts['user'] ?? '';
