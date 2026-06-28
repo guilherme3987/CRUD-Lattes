@@ -31,7 +31,7 @@ def conectar_mysql():
             host=url.hostname,
             user=url.username,
             password=url.password,
-            port=url.port or 3306,
+            port=url.port ,
             database=nome_banco,
             charset="utf8mb4",
         )
