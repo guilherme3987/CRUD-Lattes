@@ -6,7 +6,6 @@ WebSystem/vendor/
 # === virtual environment ===
 .venv/
 GetData/.venv/
-WebSystem\.env
 # === Python cache ===
 __pycache__/
 *.pyc
@@ -25,4 +24,7 @@ Thumbs.db
 .DS_Store
 Thumbs.db
 *.log
-echo -e "\n# === Environment variables ===\n.env\nGetData/.env" >> .gitignore
+# === Environment variables ===
+.env
+GetData/.env
+WebSystem/.env
