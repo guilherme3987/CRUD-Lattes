@@ -3,10 +3,10 @@
 vendor/
 WebSystem/vendor/
 
-# === Python virtual environment ===
+# === virtual environment ===
 .venv/
 GetData/.venv/
-
+WebSystem\.env
 # === Python cache ===
 __pycache__/
 *.pyc
