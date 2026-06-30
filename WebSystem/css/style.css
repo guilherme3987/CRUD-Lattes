@@ -152,6 +152,9 @@ input, textarea, button, select { font: inherit; }
 .resumo-text.expanded { max-height: none; }
 .resumo-toggle { padding: 0; margin-top: .5rem; font-size: 13px; }
 
+/* === Utils === */
+.text-nowrap { white-space: nowrap; }
+
 /* === Grid === */
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 @media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }

@@ -111,22 +111,68 @@ class PesquisadorController extends BaseController {
                 $this->redirect('/?action=create');
                 return;
             }
-            $data = $_POST;
 
-            $existingId = $this->pesquisadorRepo->getById($data['id_lattes']);
-            if ($existingId) {
-                $this->render('pesquisador/create', ['erro' => 'ID Lattes já cadastrado.']);
-                return;
-            }
-            $existingEmail = $this->pesquisadorRepo->findByEmail($data['email'] ?? '');
-            if ($existingEmail) {
-                $this->render('pesquisador/create', ['erro' => 'E-mail já cadastrado.']);
-                return;
+            $allowed = ['id_lattes', 'email', 'senha', 'nome_completo', 'pais_nascimento', 'cidade_nascimento', 'orcid_id', 'resumo_cv'];
+            $data = array_intersect_key($_POST, array_flip($allowed));
+
+            $erros = [];
+
+            $id_lattes = $data['id_lattes'] ?? '';
+            if (!preg_match('/^\d{16}$/', $id_lattes)) {
+                $erros[] = 'ID Lattes inválido. Deve conter exatamente 16 dígitos.';
             }
 
-            $data['senha'] = $this->auth->hashPassword($data['senha'] ?? '');
+            $email = $data['email'] ?? '';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $erros[] = 'E-mail inválido.';
+            }
+
+            $senha = $data['senha'] ?? '';
+            if (strlen($senha) < 6) {
+                $erros[] = 'Senha deve ter no mínimo 6 caracteres.';
+            }
+
+            $nome = $data['nome_completo'] ?? '';
+            if (!preg_match('/^[\p{L}\s.\'\-]+$/u', $nome)) {
+                $erros[] = 'Nome completo inválido.';
+            }
+
+            $pais = $data['pais_nascimento'] ?? '';
+            if (!preg_match('/^[\p{L}\s\'\-]+$/u', $pais)) {
+                $erros[] = 'País de nascimento inválido.';
+            }
+
+            $cidade = $data['cidade_nascimento'] ?? '';
+            if (!preg_match('/^[\p{L}\s\'\-]+$/u', $cidade)) {
+                $erros[] = 'Cidade de nascimento inválida.';
+            }
+
+            $orcid = $data['orcid_id'] ?? '';
+            if ($orcid !== '') {
+                $isOrcid = preg_match('/^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/', $orcid);
+                $isOrcidUrl = preg_match('/^https:\/\/orcid\.org\/\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/', $orcid);
+                if (!$isOrcid && !$isOrcidUrl) {
+                    $erros[] = 'ORCID inválido. Formato: 0000-0000-0000-0000 ou https://orcid.org/0000-0000-0000-0000.';
+                }
+            }
+
+            if (empty($erros)) {
+                if ($this->pesquisadorRepo->getById($id_lattes)) {
+                    $erros[] = 'ID Lattes já cadastrado.';
+                }
+                if ($this->pesquisadorRepo->findByEmail($email)) {
+                    $erros[] = 'E-mail já cadastrado.';
+                }
+            }
+
+            if (!empty($erros)) {
+                $this->render('pesquisador/create', ['erro' => implode("\n", $erros)]);
+                return;
+            }
+
+            $data['senha'] = $this->auth->hashPassword($senha);
             $this->pesquisadorRepo->create($data);
-            $this->auth->login($data['id_lattes'], $data['nome_completo']);
+            $this->auth->login($id_lattes, $nome);
             $this->redirect('/?action=edit');
         }
         $this->render('pesquisador/create');

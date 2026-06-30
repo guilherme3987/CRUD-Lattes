@@ -5,7 +5,7 @@
 
 <div class="card">
   <?php if (!empty($erro)): ?>
-    <div class="login-erro" style="margin-bottom:1rem"><?= htmlspecialchars($erro) ?></div>
+    <div class="login-erro" style="margin-bottom:1rem"><?= nl2br(htmlspecialchars($erro)) ?></div>
   <?php endif; ?>
   <form class="form" method="POST">
     <?= $csrf->renderHiddenField() ?>
