@@ -6,7 +6,7 @@ O projeto é dividido em dois componentes principais: um **pipeline ETL** em Pyt
 
 Disponível em: [https://crud-lattes.onrender.com/](https://crud-lattes.onrender.com/)\
 Deploy do banco de dados no [aiven.io](https://aiven.io/)\
-Deploy da aplicação no [render.com](https://render.com/)\
+Deploy da aplicação no [render.com](https://render.com/)
 ---
 
 ## Tecnologias utilizadas
