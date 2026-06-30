@@ -4,9 +4,9 @@ Sistema web para consulta, cadastro e gerenciamento de currículos da plataforma
 
 O projeto é dividido em dois componentes principais: um **pipeline ETL** em Python que faz a leitura, parse e importação dos XMLs Lattes para o MySQL, e uma **aplicação web** em PHP que consome esses dados e oferece a interface para os usuários finais.
 
-Disponível em: [text](https://crud-lattes.onrender.com/)
-Deploy do banco de dados no [text](https://aiven.io/)
-Deploy da aplicação no [text](https://render.com/)
+Disponível em: [https://crud-lattes.onrender.com/](https://crud-lattes.onrender.com/)\
+Deploy do banco de dados no [aiven.io](https://aiven.io/)\
+Deploy da aplicação no [render.com](https://render.com/)\
 ---
 
 ## Tecnologias utilizadas
