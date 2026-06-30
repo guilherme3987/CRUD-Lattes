@@ -1,11 +1,12 @@
-# CRUD Lattes — Scientia Discovery
+# CRUD Lattes Scientia Discovery
 
 Sistema web para consulta, cadastro e gerenciamento de currículos da plataforma Lattes (CNPq). O projeto importa dados reais de currículos em XML, extrai informações acadêmicas e profissionais, e disponibiliza uma interface para navegação pública e edição autenticada.
 
-A aplicação nasce da necessidade de centralizar a visualização de pesquisadores a partir dos dados abertos da plataforma Lattes. Em vez de depender da interface oficial, o sistema oferece busca por ORCID, perfis públicos, painel administrativo e suporte a temas claro/escuro — tudo em uma aplicação PHP sem frameworks, construída sobre arquitetura MVC.
-
 O projeto é dividido em dois componentes principais: um **pipeline ETL** em Python que faz a leitura, parse e importação dos XMLs Lattes para o MySQL, e uma **aplicação web** em PHP que consome esses dados e oferece a interface para os usuários finais.
 
+Disponível em: [text](https://crud-lattes.onrender.com/)
+Deploy do banco de dados no [text](https://aiven.io/)
+Deploy da aplicação no [text](https://render.com/)
 ---
 
 ## Tecnologias utilizadas
@@ -98,25 +99,25 @@ CRUD-Lattes/
 
 ### O que cada pasta faz
 
-- **`WebSystem/config/`** — Configuração da conexão com o banco via PDO. Implementa o padrão Singleton para que toda a aplicação reuse a mesma instância de conexão.
+- **`WebSystem/config/`** Configuração da conexão com o banco via PDO. Implementa o padrão Singleton para que toda a aplicação reuse a mesma instância de conexão.
 
-- **`WebSystem/core/`** — Classes fundamentais do framework: o `Router` mapeia ações a handlers, e o `BaseController` fornece `render()` e `redirect()` para todos os controladores.
+- **`WebSystem/core/`** Classes fundamentais do framework: o `Router` mapeia ações a handlers, e o `BaseController` fornece `render()` e `redirect()` para todos os controladores.
 
-- **`WebSystem/controllers/`** — Contém apenas o `PesquisadorController`, que concentra toda a lógica de cada rota: exibir landing, listar, criar, editar, deletar, fazer login, buscar e gerenciar formações e atuações.
+- **`WebSystem/controllers/`** Contém apenas o `PesquisadorController`, que concentra toda a lógica de cada rota: exibir landing, listar, criar, editar, deletar, fazer login, buscar e gerenciar formações e atuações.
 
-- **`WebSystem/models/`** — Models que atuam como fachadas estáticas para os repositórios. São mantidos para compatibilidade com o padrão MVC tradicional.
+- **`WebSystem/models/`** Models que atuam como fachadas estáticas para os repositórios. São mantidos para compatibilidade com o padrão MVC tradicional.
 
-- **`WebSystem/repositories/`** — Contém as consultas SQL propriamente ditas. Cada repositório encapsula todo o acesso a dados de uma entidade. Nenhuma SQL aparece fora daqui.
+- **`WebSystem/repositories/`** Contém as consultas SQL propriamente ditas. Cada repositório encapsula todo o acesso a dados de uma entidade. Nenhuma SQL aparece fora daqui.
 
-- **`WebSystem/services/`** — Serviços transversais: `AuthService` cuida da autenticação via sessão com bcrypt, `CsrfService` protege formulários contra ataques CSRF.
+- **`WebSystem/services/`** Serviços transversais: `AuthService` cuida da autenticação via sessão com bcrypt, `CsrfService` protege formulários contra ataques CSRF.
 
-- **`WebSystem/views/`** — Templates PHP com o mínimo de lógica possível. Divididos em layout (header/footer) e páginas específicas. Recebem dados prontos dos controladores.
+- **`WebSystem/views/`** Templates PHP com o mínimo de lógica possível. Divididos em layout (header/footer) e páginas específicas. Recebem dados prontos dos controladores.
 
-- **`WebSystem/css/`** — Único arquivo `style.css` com toda a estilização: variáveis CSS, tema claro/escuro, grid responsivo, componentes.
+- **`WebSystem/css/`** Único arquivo `style.css` com toda a estilização: variáveis CSS, tema claro/escuro, grid responsivo, componentes.
 
-- **`WebSystem/js/`** — JavaScript modular mínimo para interações de interface.
+- **`WebSystem/js/`** JavaScript modular mínimo para interações de interface.
 
-- **`GetData/`** — Scripts Python e SQL para extrair, transformar e carregar (ETL) os currículos Lattes do formato XML para o MySQL.
+- **`GetData/`** Scripts Python e SQL para extrair, transformar e carregar (ETL) os currículos Lattes do formato XML para o MySQL.
 
 ---
 
@@ -169,7 +170,7 @@ Usuário (navegador)
 
 2. **O front controller** (`index.php`) inicia a sessão, carrega o autoload e instancia o `Router`.
 
-3. **O Router** verifica o parâmetro `action` na URL. Se a ação existir no mapa, executa o handler correspondente — normalmente um método do controlador.
+3. **O Router** verifica o parâmetro `action` na URL. Se a ação existir no mapa, executa o handler correspondente normalmente um método do controlador.
 
 4. **O Controller** recebe a requisição. Ele valida permissões (autenticação), lê parâmetros (`$_GET`, `$_POST`), e invoca o repositório apropriado para buscar ou persistir dados.
 
@@ -202,13 +203,13 @@ class PesquisadorController extends BaseController
 
 Explicação linha a linha:
 
-- **`class PesquisadorController extends BaseController`** — Define o controlador e herda de `BaseController`, que fornece os métodos `render()` e `redirect()`, além das instâncias de `AuthService` e `CsrfService`.
+- **`class PesquisadorController extends BaseController`** Define o controlador e herda de `BaseController`, que fornece os métodos `render()` e `redirect()`, além das instâncias de `AuthService` e `CsrfService`.
 
-- **`public function profile(): void`** — Método que manipula a rota `/profile`. É público pois é chamado pelo Router.
+- **`public function profile(): void`** Método que manipula a rota `/profile`. É público pois é chamado pelo Router.
 
-- **`$this->auth->requireAuth()`** — Bloqueia o acesso se o usuário não estiver logado. Redireciona para a página de login.
+- **`$this->auth->requireAuth()`** Bloqueia o acesso se o usuário não estiver logado. Redireciona para a página de login.
 
-- **`$this->show($this->auth->getLoggedInId())`** — Delega a exibição para o método `show()`, passando o ID do pesquisador autenticado. Isso evita duplicação de lógica.
+- **`$this->show($this->auth->getLoggedInId())`** Delega a exibição para o método `show()`, passando o ID do pesquisador autenticado. Isso evita duplicação de lógica.
 
 ```php
 public function show(string $id): void
@@ -234,11 +235,11 @@ public function show(string $id): void
 
 Explicação:
 
-1. **`$this->pesquisadorRepo->getById($id)`** — Consulta o repositório que executa o `SELECT * FROM pesquisador WHERE id_lattes = ?`.
+1. **`$this->pesquisadorRepo->getById($id)`** Consulta o repositório que executa o `SELECT * FROM pesquisador WHERE id_lattes = ?`.
 
-2. **`if (!$pesquisador)`** — Se o ID não existir no banco, redireciona para a home.
+2. **`if (!$pesquisador)`** Se o ID não existir no banco, redireciona para a home.
 
-3. **`$this->render('pesquisador/show', [...])`** — Chama o método herdado que carrega o header, a view `views/pesquisador/show.php` e o footer. Os dados passados no array são extraídos como variáveis dentro da view.
+3. **`$this->render('pesquisador/show', [...])`** Chama o método herdado que carrega o header, a view `views/pesquisador/show.php` e o footer. Os dados passados no array são extraídos como variáveis dentro da view.
 
 ---
 
@@ -260,15 +261,15 @@ public function getById(string $idLattes): ?array
 
 Explicação linha a linha:
 
-- **`Database::getConnection()`** — Obtém a instância singleton da conexão PDO, configurada com `ERRMODE_EXCEPTION`, fetch mode associativo e `EMULATE_PREPARES = false`.
+- **`Database::getConnection()`** Obtém a instância singleton da conexão PDO, configurada com `ERRMODE_EXCEPTION`, fetch mode associativo e `EMULATE_PREPARES = false`.
 
-- **`$conn->prepare(...)`** — Cria um prepared statement com um placeholder `?`. O MySQL analisa a sintaxe uma vez e reutiliza o plano de execução.
+- **`$conn->prepare(...)`** Cria um prepared statement com um placeholder `?`. O MySQL analisa a sintaxe uma vez e reutiliza o plano de execução.
 
-- **`$stmt->execute([$idLattes])`** — Substitui o placeholder pelo valor real de forma segura. O PDO escapa o valor automaticamente, eliminando risco de SQL injection.
+- **`$stmt->execute([$idLattes])`** Substitui o placeholder pelo valor real de forma segura. O PDO escapa o valor automaticamente, eliminando risco de SQL injection.
 
-- **`$stmt->fetch()`** — Retorna a primeira linha como um array associativo (ex: `['id_lattes' => '...', 'nome_completo' => '...']`) ou `false` se não encontrar.
+- **`$stmt->fetch()`** Retorna a primeira linha como um array associativo (ex: `['id_lattes' => '...', 'nome_completo' => '...']`) ou `false` se não encontrar.
 
-- **`return $result ?: null`** — Converte o `false` do fetch para `null`, facilitando a verificação no controlador com `if (!$pesquisador)`.
+- **`return $result ?: null`** Converte o `false` do fetch para `null`, facilitando a verificação no controlador com `if (!$pesquisador)`.
 
 ```php
 // PesquisadorRepository.php
@@ -307,11 +308,11 @@ As views contêm **apenas apresentação**. Não realizam consultas ao banco, n�
 
 Explicação:
 
-- **`<?= ... ?>`** — Tag de saída do PHP (short echo tag). Equivalente a `<?php echo ... ?>`. Disponivel a partir do PHP 5.4+.
+- **`<?= ... ?>`** Tag de saída do PHP (short echo tag). Equivalente a `<?php echo ... ?>`. Disponivel a partir do PHP 5.4+.
 
-- **`htmlspecialchars($pesquisador['nome_completo'])`** — Converte caracteres especiais HTML (`<`, `>`, `"`, `&`) em suas entidades. Impede ataques XSS. Sempre que um dado vindo do banco ou do usuário for exibido, ele deve passar por esta função.
+- **`htmlspecialchars($pesquisador['nome_completo'])`** Converte caracteres especiais HTML (`<`, `>`, `"`, `&`) em suas entidades. Impede ataques XSS. Sempre que um dado vindo do banco ou do usuário for exibido, ele deve passar por esta função.
 
-- **`$pesquisador`** — Variável disponível na view porque o controlador fez `$this->render('pesquisador/show', ['pesquisador' => $dados])`. O `BaseController::render()` usa `extract($data)` para transformar cada chave do array em uma variável.
+- **`$pesquisador`** Variável disponível na view porque o controlador fez `$this->render('pesquisador/show', ['pesquisador' => $dados])`. O `BaseController::render()` usa `extract($data)` para transformar cada chave do array em uma variável.
 
 ```php
 <!-- views/pesquisador/show.php -->
@@ -330,7 +331,7 @@ Explicação:
 </dl>
 ```
 
-A separação é rigorosa: a view itera sobre arrays, aplica `htmlspecialchars()` em cada valor, monta classes CSS condicionais com operadores ternários — e nada mais. Não há SQL, não há `$_POST`, não há lógica de validação.
+A separação é rigorosa: a view itera sobre arrays, aplica `htmlspecialchars()` em cada valor, monta classes CSS condicionais com operadores ternários e nada mais. Não há SQL, não há `$_POST`, não há lógica de validação.
 
 ---
 
@@ -380,7 +381,7 @@ Todas as cores, espaçamentos e sombras são definidos como variáveis no `:root
 
 ### Tema Dark
 
-O atributo `data-theme="dark"` é aplicado no elemento `<html>`. O CSS sobrescreve as variáveis com cores escuras, e todos os componentes que usam essas variáveis se adaptam automaticamente — sem necessidade de regras CSS separadas para cada componente.
+O atributo `data-theme="dark"` é aplicado no elemento `<html>`. O CSS sobrescreve as variáveis com cores escuras, e todos os componentes que usam essas variáveis se adaptam automaticamente sem necessidade de regras CSS separadas para cada componente.
 
 ```css
 [data-theme="dark"] {
@@ -396,23 +397,23 @@ O atributo `data-theme="dark"` é aplicado no elemento `<html>`. O CSS sobrescre
 
 Os estilos seguem uma abordagem de classes utilitárias e componentes nomeados:
 
-- **`.card`** — Container com borda, padding e background que se adapta ao tema.
-- **`.btn` / `.btn-primary` / `.btn-outline` / `.btn-danger`** — Botões com variantes de cor.
-- **`.table` / `.table-wrap`** — Tabelas responsivas com scroll horizontal.
-- **`.form` / `.form-group` / `.form-row`** — Formulários com grid de duas colunas.
-- **`.data-list`** — Lista de definição em grid (dt/dd lado a lado).
-- **`.resumo-text`** — Bloco de texto com altura máxima truncada e transição para expansão.
-- **`.search-bar`** — Barra de busca com ícone e input.
-- **`.stats-grid` / `.stat-card`** — Cards de estatísticas na landing page.
+- **`.card`** Container com borda, padding e background que se adapta ao tema.
+- **`.btn` / `.btn-primary` / `.btn-outline` / `.btn-danger`** Botões com variantes de cor.
+- **`.table` / `.table-wrap`** Tabelas responsivas com scroll horizontal.
+- **`.form` / `.form-group` / `.form-row`** Formulários com grid de duas colunas.
+- **`.data-list`** Lista de definição em grid (dt/dd lado a lado).
+- **`.resumo-text`** Bloco de texto com altura máxima truncada e transição para expansão.
+- **`.search-bar`** Barra de busca com ícone e input.
+- **`.stats-grid` / `.stat-card`** Cards de estatísticas na landing page.
 
 ### Responsividade
 
 O layout usa `max-width: 1280px` centralizado, `flexbox` e `grid` com breakpoints em:
 
-- **860px** — Grid de 2 colunas vira 1 coluna.
-- **768px** — Section headers empilham verticalmente.
-- **640px** — Título da hero reduz, grid de features vira 1 coluna.
-- **480px** — Stats grid vira 1 coluna.
+- **860px** Grid de 2 colunas vira 1 coluna.
+- **768px** Section headers empilham verticalmente.
+- **640px** Título da hero reduz, grid de features vira 1 coluna.
+- **480px** Stats grid vira 1 coluna.
 
 ```css
 .grid-2 {
@@ -448,7 +449,7 @@ O JS é escrito em JavaScript puro (Vanilla), sem dependências externas. As fun
 })();
 ```
 
-**`toggleResumo()`** — Alterna a classe `.expanded` no texto do resumo, que remove o `max-height` limitado (transição CSS de 0.35s). Troca o texto do botão entre "Ver mais" e "Ver menos".
+**`toggleResumo()`** Alterna a classe `.expanded` no texto do resumo, que remove o `max-height` limitado (transição CSS de 0.35s). Troca o texto do botão entre "Ver mais" e "Ver menos".
 
 ```javascript
 window.toggleForm = function (id, button) {
@@ -467,7 +468,7 @@ window.toggleForm = function (id, button) {
 };
 ```
 
-**`toggleForm(id, button)`** — Exibe ou oculta um formulário de adição (formação ou atuação). Alterna o texto e a classe do botão entre "Adicionar" (primário) e "Cancelar" (perigo).
+**`toggleForm(id, button)`** Exibe ou oculta um formulário de adição (formação ou atuação). Alterna o texto e a classe do botão entre "Adicionar" (primário) e "Cancelar" (perigo).
 
 ---
 
@@ -488,9 +489,9 @@ pesquisador (id_lattes, email, senha, nome_completo, pais_nascimento,
 
 ### Relacionamentos
 
-- **Pesquisador 1:N Formação** — Um pesquisador pode ter várias formações (graduação, mestrado, doutorado, pós-doutorado). A chave estrangeira `id_lattes` na tabela `formacao_academica` referencia `pesquisador.id_lattes` com `ON DELETE CASCADE`.
+- **Pesquisador 1:N Formação** Um pesquisador pode ter várias formações (graduação, mestrado, doutorado, pós-doutorado). A chave estrangeira `id_lattes` na tabela `formacao_academica` referencia `pesquisador.id_lattes` com `ON DELETE CASCADE`.
 
-- **Pesquisador 1:N Atuação** — Um pesquisador pode ter várias atuações profissionais. Mesmo esquema de chave estrangeira com cascade.
+- **Pesquisador 1:N Atuação** Um pesquisador pode ter várias atuações profissionais. Mesmo esquema de chave estrangeira com cascade.
 
 ### Esquema SQL
 
@@ -639,33 +640,33 @@ Para fazer login, utilize o email e senha gerados pelo script de importação. A
 
 ## Boas práticas adotadas
 
-- **Separação de responsabilidades** — Cada classe tem uma função bem definida. Controllers orquestram, repositories acessam dados, views exibem.
+- **Separação de responsabilidades** Cada classe tem uma função bem definida. Controllers orquestram, repositories acessam dados, views exibem.
 
-- **MVC** — Padrão arquitetural que mantém o código organizado e facilita a manutenção.
+- **MVC** Padrão arquitetural que mantém o código organizado e facilita a manutenção.
 
-- **HTML sem lógica pesada** — As views contêm apenas loops, condicionais e chamadas a `htmlspecialchars()`. Nenhuma lógica de negócio ou SQL.
+- **HTML sem lógica pesada** As views contêm apenas loops, condicionais e chamadas a `htmlspecialchars()`. Nenhuma lógica de negócio ou SQL.
 
-- **SQL apenas nos Repositories** — Nenhuma query SQL aparece fora das classes `*Repository.php`. Isso centraliza as consultas e facilita auditoria.
+- **SQL apenas nos Repositories** Nenhuma query SQL aparece fora das classes `*Repository.php`. Isso centraliza as consultas e facilita auditoria.
 
-- **Controllers enxutos** — Métodos com poucas linhas, cada um responsável por uma única ação. Validação de autenticação é delegada ao `AuthService`.
+- **Controllers enxutos** Métodos com poucas linhas, cada um responsável por uma única ação. Validação de autenticação é delegada ao `AuthService`.
 
-- **CSS organizado com variáveis** — Cores, sombras e espaçamentos são definidos como variáveis CSS, permitindo tema escuro sem duplicação.
+- **CSS organizado com variáveis** Cores, sombras e espaçamentos são definidos como variáveis CSS, permitindo tema escuro sem duplicação.
 
-- **Dark Mode** — Alternância de tema via atributo `data-theme` com transição suave de `background` e `color`.
+- **Dark Mode** Alternância de tema via atributo `data-theme` com transição suave de `background` e `color`.
 
-- **Componentização no CSS** — Classes reutilizáveis como `.card`, `.btn`, `.table` que podem ser combinadas livremente.
+- **Componentização no CSS** Classes reutilizáveis como `.card`, `.btn`, `.table` que podem ser combinadas livremente.
 
-- **Responsividade** — Layout adaptável com breakpoints em 860px, 768px, 640px e 480px.
+- **Responsividade** Layout adaptável com breakpoints em 860px, 768px, 640px e 480px.
 
-- **Prepared Statements** — Todas as consultas SQL usam `prepare()` + `execute()` com placeholders. Zero SQL injection.
+- **Prepared Statements** Todas as consultas SQL usam `prepare()` + `execute()` com placeholders. Zero SQL injection.
 
-- **htmlspecialchars()** — Toda saída de dados vindos do banco ou do usuário é sanitizada com `htmlspecialchars()` na view.
+- **htmlspecialchars()** Toda saída de dados vindos do banco ou do usuário é sanitizada com `htmlspecialchars()` na view.
 
-- **Proteção CSRF** — Formulários POST incluem um token único por sessão, validado com `hash_equals()`.
+- **Proteção CSRF** Formulários POST incluem um token único por sessão, validado com `hash_equals()`.
 
-- **Session Regeneration** — `session_regenerate_id(true)` no login para prevenir fixation de sessão.
+- **Session Regeneration** `session_regenerate_id(true)` no login para prevenir fixation de sessão.
 
-- **Reutilização de componentes** — O `BaseController::render()` carrega header/footer automático, injeta auth e csrf em todas as views.
+- **Reutilização de componentes** O `BaseController::render()` carrega header/footer automático, injeta auth e csrf em todas as views.
 
 ---
 
@@ -687,16 +688,16 @@ try {
 
 ### Validação de dados
 
-- **Campos obrigatórios** — Validados no controller antes de chamar o repository (ex: verificação de email duplicado no `create()`).
-- **IDs de rota** — O parâmetro `id` da URL é recebido como `?string` e convertido para `int` quando necessário (ex: `deleteAtuacao((int)$id)`).
-- **CSRF** — Todo POST é protegido por token CSRF. Se inválido, a ação é abortada com redirect.
+- **Campos obrigatórios** Validados no controller antes de chamar o repository (ex: verificação de email duplicado no `create()`).
+- **IDs de rota** O parâmetro `id` da URL é recebido como `?string` e convertido para `int` quando necessário (ex: `deleteAtuacao((int)$id)`).
+- **CSRF** Todo POST é protegido por token CSRF. Se inválido, a ação é abortada com redirect.
 
 ### Segurança
 
-- **Senhas** — Hash bcrypt via `password_hash(PASSWORD_BCRYPT)`.MD5 para migração de dados importados.
-- **Sessão** — Uso de `session_regenerate_id(true)` no login.
-- **SQL Injection** — Zero concatenação de strings em SQL. Apenas prepared statements com placeholders.
-- **XSS** — `htmlspecialchars()` em toda saída de dados dinâmicos nas views.
+- **Senhas** Hash bcrypt via `password_hash(PASSWORD_BCRYPT)`.MD5 para migração de dados importados.
+- **Sessão** Uso de `session_regenerate_id(true)` no login.
+- **SQL Injection** Zero concatenação de strings em SQL. Apenas prepared statements com placeholders.
+- **XSS** `htmlspecialchars()` em toda saída de dados dinâmicos nas views.
 
 ---
 
